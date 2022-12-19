@@ -41,9 +41,20 @@ func (r *Repository) put(keyValuePair KeyValuePair) error {
 }
 func (r *Repository) get(key string) (KeyValuePairModel, error) {
 	var keyValuePairModel KeyValuePairModel
-	r.db.Where("key = ?", key).First(&keyValuePairModel)
+	r.db.Where("key = ? and (ttl > ? and ttl != ?) or ttl == ? ", key).First(&keyValuePairModel)
 	if keyValuePairModel.Key == "" {
 		return keyValuePairModel, errors.New("Key not present in the system")
 	}
 	return keyValuePairModel, nil
+}
+func (r *Repository) delete(key string) error {
+	var keyValuePairModel KeyValuePairModel
+	r.db.Where("key = ?", key).First(&keyValuePairModel)
+	if keyValuePairModel.Key != key {
+		return errors.New("Key not present in the system")
+	} else {
+		keyValuePairModel.Ttl = -1
+		r.db.Save(&keyValuePairModel)
+		return nil
+	}
 }

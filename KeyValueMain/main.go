@@ -39,6 +39,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/put", controller.put).Methods("PUT")
 	router.HandleFunc("/api/get", controller.get).Methods("GET")
+	router.HandleFunc("/api/delete", controller.delete).Methods("DELETE")
 	srv := &http.Server{
 		Handler: router,
 		Addr:    "127.0.0.1:8081",

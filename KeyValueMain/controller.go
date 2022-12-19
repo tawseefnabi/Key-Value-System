@@ -48,3 +48,17 @@ func (c *Controller) get(w http.ResponseWriter, r *http.Request) {
 	CommonHttpRequest(w, http.StatusOK, "value:="+value, "normal")
 
 }
+
+func (c *Controller) delete(w http.ResponseWriter, r *http.Request) {
+	key := r.URL.Query().Get("key")
+	if key == "" {
+		CommonHttpRequest(w, http.StatusBadRequest, "plz provide key", "err")
+		return
+	}
+	err := c.service.delete(key)
+	if err != nil {
+		CommonHttpRequest(w, http.StatusInternalServerError, err.Error(), "err")
+		return
+	}
+	CommonHttpRequest(w, http.StatusOK, "value deleted", "normal")
+}

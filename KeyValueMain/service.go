@@ -26,3 +26,7 @@ func (s *Service) get(key string) (string, error) {
 		return KeyValuePairModel.Value, nil
 	}
 }
+func (s *Service) delete(key string) error {
+	err := s.repository.delete(key)
+	return err
+}
